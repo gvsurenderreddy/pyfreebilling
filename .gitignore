@@ -10,11 +10,13 @@
 pyfreebilling/local_settings.py
 freeswitch/scripts/myconfig.pm
 sftp-config.json
+Vagrantfile
 
 # DIRECTORY
 #################
 media/
 custom_admin_tools/
+.vagrant/
 
 # OS GENERATED FILES
 #################
