@@ -16,8 +16,6 @@
 
 from django.contrib import admin
 
-from yawdadmin import admin_site
-
 from did.models import CustomerRatesDid, ProviderRatesDid
 
 
@@ -67,5 +65,5 @@ class ProviderRatesDidAdmin(admin.ModelAdmin):
 #----------------------------------------
 # register
 #----------------------------------------
-admin_site.register(CustomerRatesDid, CustomerRatesDidAdmin)
-admin_site.register(ProviderRatesDid, ProviderRatesDidAdmin)
+admin.site.register(CustomerRatesDid, CustomerRatesDidAdmin)
+admin.site.register(ProviderRatesDid, ProviderRatesDidAdmin)

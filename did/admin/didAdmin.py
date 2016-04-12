@@ -20,8 +20,6 @@ from django.template import Context, loader
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
-from yawdadmin import admin_site
-
 from switch import esl
 
 from did.models import Did, RoutesDid
@@ -105,4 +103,4 @@ class DidAdmin(admin.ModelAdmin):
 #----------------------------------------
 # register
 #----------------------------------------
-admin_site.register(Did, DidAdmin)
+admin.site.register(Did, DidAdmin)

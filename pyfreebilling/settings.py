@@ -130,8 +130,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'djangosecure.middleware.SecurityMiddleware',
     'axes.middleware.FailedLoginMiddleware',
-    # For django < 1.6
-    'yawdadmin.middleware.PopupMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -163,7 +161,6 @@ INSTALLED_APPS = (
     'pyfreebill',
     'switch',
     'customerportal',
-    'yawdadmin',
     'import_export',
     'django.contrib.auth',
     'django.contrib.contenttypes',

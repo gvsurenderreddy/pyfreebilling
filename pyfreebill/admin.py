@@ -32,8 +32,8 @@ from django.utils.translation import ugettext_lazy as _
 from datetime import date
 import datetime
 
-from yawdadmin import admin_site
-from yawdadmin.admin import SortableModelAdmin
+# from yawdadmin import admin.site
+# from yawdadmin.admin import SortableModelAdmin
 
 from import_export.admin import ImportExportMixin, ExportMixin, ImportMixin
 from import_export.formats import base_formats
@@ -74,7 +74,6 @@ def sofiaupdate(modeladmin, request, queryset):
                 messages.error(request, """customer sip config xml file update
                     failed. FS ACL update failed ! Try manually -- %s""" % fs)
         finally:
-            #f.close()
             messages.success(request, "sofia config xml file update success")
     except IOError:
         messages.error(request, """sofia config xml file update failed. Can
@@ -105,7 +104,6 @@ def directoryupdate(modeladmin, request, queryset):
                 messages.error(request, """customer sip config xml file update
                     failed. FS ACL update failed ! Try manually - %s""" % fs)
         finally:
-            #f.close()
             messages.success(request, """customer sip config xml file update
                 success""")
     except IOError:
@@ -272,14 +270,14 @@ class CompanyAdmin(admin.ModelAdmin):
         return mark_safe('<span class="label label-danger"><i class="icon-thumbs-down"></i> NO</span>')
     get_supplier_enabled_display.short_description = 'Provider'
     get_supplier_enabled_display.admin_order_field = 'provider_enabled'
-    
+
     def get_prepaid_display(self, obj):
         if obj.prepaid:
             return mark_safe('<span class="label label-success"><i class="icon-thumbs-up"></i> YES</span>')
         return mark_safe('<span class="label label-danger"><i class="icon-thumbs-down"></i> NO</span>')
     get_prepaid_display.short_description = 'Prepaid'
     get_prepaid_display.admin_order_field = 'prepaid'
-    
+
     def get_vat_display(self, obj):
         if obj.vat:
             return mark_safe('<span class="label label-info"><i class="icon-thumbs-up"></i> YES</span>')
@@ -488,7 +486,7 @@ class CompanyBalanceHistoryAdmin(admin.ModelAdmin):
             return ['company', 'operation_type']
         else:
             return []
-            
+
     def has_change_permission(self, request, obj=None):
         if request.user.is_superuser:
             return True
@@ -628,7 +626,7 @@ class ProviderRatesAdmin(ImportExportMixin, admin.ModelAdmin):
     actions = ['make_enabled',
                'make_disabled']
     form = ProviderRatesAdminForm
-    
+
     def get_boolean_display(self, obj):
         if obj.enabled:
             return mark_safe('<span class="label label-success"><i class="icon-thumbs-up"></i> YES</span>')
@@ -714,7 +712,7 @@ class CustomerRatesFormSet(BaseInlineFormSet):
 
 class CustomerRatesInline(admin.TabularInline):
     model = CustomerRates
-    #formset = CustomerRatesFormSet
+    # formset = CustomerRatesFormSet
     max_num = 40
     extra = 1
 
@@ -751,7 +749,7 @@ class CustomerRatesAdmin(ImportExportMixin, admin.ModelAdmin):
         return mark_safe('<span class="label label-warning"><i class="icon-thumbs-down"></i> NO</span>')
     get_boolean_display.short_description = 'Enabled'
     get_boolean_display.admin_order_field = 'enabled'
-    
+
     def has_change_permission(self, request, obj=None):
         if request.user.is_superuser:
             return True
@@ -810,7 +808,7 @@ class RateCardAdmin(admin.ModelAdmin):
             return True
         else:
             return False
-            
+
     def get_boolean_display(self, obj):
         if obj.enabled:
             return mark_safe('<span class="label label-success"><i class="icon-thumbs-up"></i> YES</span>')
@@ -1503,42 +1501,42 @@ class LogEntryAdmin(admin.ModelAdmin):
 
 #    admin.site.disable_action('delete_selected')
 
-#----------------------------------------
+# ----------------------------------------
 # register
-#----------------------------------------
-admin_site.register(Company, CompanyAdmin)
-admin_site.register(Person, PersonAdmin)
-admin_site.register(Group, GroupAdmin)
-admin_site.register(CompanyBalanceHistory, CompanyBalanceHistoryAdmin)
-admin_site.register(CalleridPrefix, CalleridPrefixAdmin)
-admin_site.register(CalleridPrefixList, CalleridPrefixListAdmin)
-admin_site.register(ProviderTariff, ProviderTariffAdmin)
-admin_site.register(ProviderRates, ProviderRatesAdmin)
-admin_site.register(LCRGroup, LCRGroupAdmin)
-#admin.site.register(LCRProviders, LCRProvidersAdmin)
-admin_site.register(RateCard, RateCardAdmin)
-admin_site.register(CustomerRates, CustomerRatesAdmin)
-admin_site.register(CustomerRateCards, CustomerRateCardsAdmin)
-admin_site.register(CustomerDirectory, CustomerDirectoryAdmin)
-#admin_site.register(AclLists, AclListsAdmin)
-#admin.site.register(AclNodes, AclNodesAdmin)
-#admin.site.register(VoipSwitch, VoipSwitchAdmin)
-admin_site.register(SipProfile, SipProfileAdmin)
-admin_site.register(SofiaGateway, SofiaGatewayAdmin)
-#admin.site.register(HangupCause, HangupCauseAdmin)
-admin_site.register(CDR, CDRAdmin)
-admin_site.register(CarrierNormalizationRules, CarrierNormalizationRulesAdmin)
-admin_site.register(CustomerNormalizationRules,
+# ----------------------------------------
+admin.site.register(Company, CompanyAdmin)
+admin.site.register(Person, PersonAdmin)
+admin.site.register(Group, GroupAdmin)
+admin.site.register(CompanyBalanceHistory, CompanyBalanceHistoryAdmin)
+admin.site.register(CalleridPrefix, CalleridPrefixAdmin)
+admin.site.register(CalleridPrefixList, CalleridPrefixListAdmin)
+admin.site.register(ProviderTariff, ProviderTariffAdmin)
+admin.site.register(ProviderRates, ProviderRatesAdmin)
+admin.site.register(LCRGroup, LCRGroupAdmin)
+# admin.site.register(LCRProviders, LCRProvidersAdmin)
+admin.site.register(RateCard, RateCardAdmin)
+admin.site.register(CustomerRates, CustomerRatesAdmin)
+admin.site.register(CustomerRateCards, CustomerRateCardsAdmin)
+admin.site.register(CustomerDirectory, CustomerDirectoryAdmin)
+# admin.site.register(AclLists, AclListsAdmin)
+# admin.site.register(AclNodes, AclNodesAdmin)
+# admin.site.register(VoipSwitch, VoipSwitchAdmin)
+admin.site.register(SipProfile, SipProfileAdmin)
+admin.site.register(SofiaGateway, SofiaGatewayAdmin)
+# admin.site.register(HangupCause, HangupCauseAdmin)
+admin.site.register(CDR, CDRAdmin)
+admin.site.register(CarrierNormalizationRules, CarrierNormalizationRulesAdmin)
+admin.site.register(CustomerNormalizationRules,
                     CustomerNormalizationRulesAdmin)
-admin_site.register(CarrierCIDNormalizationRules,
+admin.site.register(CarrierCIDNormalizationRules,
                     CarrierCIDNormalizationRulesAdmin)
-admin_site.register(CustomerCIDNormalizationRules,
+admin.site.register(CustomerCIDNormalizationRules,
                     CustomerCIDNormalizationRulesAdmin)
-admin_site.register(DestinationNumberRules, DestinationNumberRulesAdmin)
-#admin.site.register(DimCustomerHangupcause, DimCustomerHangupcauseAdmin)
-#admin.site.register(DimCustomerSipHangupcause, DimCustomerSipHangupcauseAdmin)
-#admin.site.register(DimProviderHangupcause, DimProviderHangupcauseAdmin)
-#admin.site.register(DimProviderSipHangupcause, DimProviderSipHangupcauseAdmin)
-admin_site.register(DimCustomerDestination, DimCustomerDestinationAdmin)
-admin_site.register(DimProviderDestination, DimProviderDestinationAdmin)
-admin_site.register(LogEntry, LogEntryAdmin)
+admin.site.register(DestinationNumberRules, DestinationNumberRulesAdmin)
+# admin.site.register(DimCustomerHangupcause, DimCustomerHangupcauseAdmin)
+# admin.site.register(DimCustomerSipHangupcause, DimCustomerSipHangupcauseAdmin)
+# admin.site.register(DimProviderHangupcause, DimProviderHangupcauseAdmin)
+# admin.site.register(DimProviderSipHangupcause, DimProviderSipHangupcauseAdmin)
+admin.site.register(DimCustomerDestination, DimCustomerDestinationAdmin)
+admin.site.register(DimProviderDestination, DimProviderDestinationAdmin)
+admin.site.register(LogEntry, LogEntryAdmin)

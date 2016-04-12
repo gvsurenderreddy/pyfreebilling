@@ -17,8 +17,6 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from yawdadmin.widgets import SwitchWidget
-
 from datetimewidget.widgets import DateTimeWidget
 
 from pyfreebill.models import Company, RateCard, LCRGroup
