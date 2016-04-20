@@ -17,8 +17,6 @@
 
 from django.contrib import admin
 from django.contrib import messages
-from django.contrib.contenttypes import generic
-from django.contrib.comments.models import Comment
 from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
 from django.utils.html import escape
 from django.core.urlresolvers import reverse
@@ -41,7 +39,7 @@ from import_export.formats import base_formats
 from switch import esl
 
 from pyfreebill.models import *
-from pyfreebill.forms import CustomerRateCardsAdminForm, CompanyAdminForm, CustomerRatesAdminForm, ProviderRatesAdminForm, ProviderTariffAdminForm, RateCardAdminForm, CustomerDirectoryAdminForm
+from pyfreebill.forms import CustomerRateCardsAdminForm, CompanyAdminForm
 from pyfreebill.resources import CDRResourceExtra, CalleridPrefixResource
 
 
@@ -149,49 +147,36 @@ admin.site.add_action(aclupdate, _(u"generate acl configuration file"))
 # Company - Contatcs
 
 
-class EmailAddressInline(generic.GenericTabularInline):
+class EmailAddressInline(admin.TabularInline):
     model = EmailAddress
     extra = 0
     collapse = True
 
 
-class PhoneNumberInline(generic.GenericTabularInline):
+class PhoneNumberInline(admin.TabularInline):
     model = PhoneNumber
     extra = 0
     collapse = True
     title_icon = 'fa-phone-square'
 
 
-class InstantMessengerInline(generic.GenericTabularInline):
+class InstantMessengerInline(admin.TabularInline):
     model = InstantMessenger
     extra = 0
     collapse = True
 
 
-class WebSiteInline(generic.GenericTabularInline):
+class WebSiteInline(admin.TabularInline):
     model = WebSite
     extra = 0
     collapse = True
 
 
-class StreetAddressInline(generic.GenericStackedInline):
+class StreetAddressInline(admin.StackedInline):
     model = StreetAddress
     extra = 0
     collapse = True
     modal = True
-
-
-class SpecialDateInline(generic.GenericStackedInline):
-    model = SpecialDate
-    extra = 0
-    collapse = True
-
-
-class CommentInline(generic.GenericStackedInline):
-    model = Comment
-    ct_fk_field = 'object_pk'
-    extra = 0
-    collapse = True
 
 
 class CustomerRateCardsInline(admin.StackedInline):
@@ -206,16 +191,7 @@ class CustomerRateCardsInline(admin.StackedInline):
 
 
 class CompanyAdmin(admin.ModelAdmin):
-    inlines = [
-        CustomerRateCardsInline,
-        PhoneNumberInline,
-        EmailAddressInline,
-        InstantMessengerInline,
-        WebSiteInline,
-        StreetAddressInline,
-        SpecialDateInline,
-        CommentInline,
-    ]
+
     form = CompanyAdminForm
     affix = True
     save_on_top = True
@@ -383,15 +359,6 @@ class CompanyAdmin(admin.ModelAdmin):
 
 
 class PersonAdmin(admin.ModelAdmin):
-    inlines = [
-        PhoneNumberInline,
-        EmailAddressInline,
-        InstantMessengerInline,
-        WebSiteInline,
-        StreetAddressInline,
-        SpecialDateInline,
-        CommentInline,
-    ]
 
     list_display_links = ('first_name',
                           'last_name')
@@ -586,7 +553,6 @@ class ProviderTariffAdmin(admin.ModelAdmin):
                     'rates']
     ordering = ['name', ]
     readonly_fields = ['id', ]
-    form = ProviderTariffAdminForm
 
     def get_boolean_display(self, obj):
         if obj.enabled:
@@ -625,7 +591,6 @@ class ProviderRatesAdmin(ImportExportMixin, admin.ModelAdmin):
                      '^destination']
     actions = ['make_enabled',
                'make_disabled']
-    form = ProviderRatesAdminForm
 
     def get_boolean_display(self, obj):
         if obj.enabled:
@@ -741,7 +706,6 @@ class CustomerRatesAdmin(ImportExportMixin, admin.ModelAdmin):
                      '^destination']
     actions = ['make_enabled', 'make_disabled']
     readonly_fields = ['id', ]
-    form = CustomerRatesAdminForm
 
     def get_boolean_display(self, obj):
         if obj.enabled:
@@ -798,10 +762,6 @@ class RateCardAdmin(admin.ModelAdmin):
     ordering = ['name', 'enabled', 'lcrgroup']
     list_filter = ['enabled', 'lcrgroup']
     search_fields = ['description', '^name']
-    form = RateCardAdminForm
-#     inlines = [
-#         CustomerRatesInline,
-#     ]
 
     def has_change_permission(self, request, obj=None):
         if request.user.is_superuser:
@@ -817,7 +777,7 @@ class RateCardAdmin(admin.ModelAdmin):
     get_boolean_display.admin_order_field = 'enabled'
 
 
-class CustomerRateCardsAdmin(SortableModelAdmin):
+class CustomerRateCardsAdmin(admin.ModelAdmin):
     list_display = ['company',
                     'ratecard',
                     'tech_prefix',
@@ -853,7 +813,6 @@ class CustomerDirectoryAdmin(admin.ModelAdmin):
     #list_editable = ['max_calls', 'calls_per_second']
     search_filter = ['^sip_ip', '^company', '^name']
     exclude = ['vmd', ]
-    form = CustomerDirectoryAdminForm
     actions = [directoryupdate]
     save_on_top = True
     affix = True

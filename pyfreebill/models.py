@@ -20,10 +20,7 @@ from django.core.validators import EMPTY_VALUES
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
-from django.contrib.contenttypes import generic
-from django.contrib.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.generic import GenericRelation
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html
 
@@ -74,11 +71,7 @@ class Company(models.Model):
                              max_length=250,
                              blank=True,
                              null=True)
-    phone_number = GenericRelation(u'PhoneNumber')
-    email_address = GenericRelation(u'EmailAddress')
-    web_site = GenericRelation(u'WebSite')
-    street_address = GenericRelation(u'StreetAddress')
-    note = GenericRelation(Comment, object_id_field='object_pk')
+    # note = GenericRelation(Comment, object_id_field='object_pk')
     account_number = models.IntegerField(_(u"Account number"),
                                          blank=True,
                                          null=True)
@@ -234,12 +227,6 @@ class Person(models.Model):
                                 blank=True,
                                 null=True,
                                 verbose_name=_('user'))
-    phone_number = GenericRelation('PhoneNumber')
-    email_address = GenericRelation('EmailAddress')
-    instant_messenger = GenericRelation('InstantMessenger')
-    special_date = GenericRelation('SpecialDate')
-    note = GenericRelation(Comment,
-                           object_id_field='object_pk')
     date_added = models.DateTimeField(_('date added'),
                                       auto_now_add=True)
     date_modified = models.DateTimeField(_('date modified'),
@@ -271,12 +258,10 @@ class Group(models.Model):
                              blank=True)
     people = models.ManyToManyField(Person,
                                     verbose_name='people',
-                                    blank=True,
-                                    null=True)
+                                    blank=True)
     companies = models.ManyToManyField(Company,
                                        verbose_name='companies',
-                                       blank=True,
-                                       null=True)
+                                       blank=True)
     date_added = models.DateTimeField(_('date added'),
                                       auto_now_add=True)
     date_modified = models.DateTimeField(_('date modified'),
@@ -306,7 +291,7 @@ class PhoneNumber(models.Model):
     content_type = models.ForeignKey(ContentType,
                                      limit_choices_to={'app_label': 'contacts'})
     object_id = models.IntegerField(db_index=True)
-    content_object = generic.GenericForeignKey()
+    # content_object = generic.GenericForeignKey()
     phone_number = models.CharField(_('number'),
                                     max_length=50)
     location = models.CharField(_('location'),
@@ -340,7 +325,7 @@ class EmailAddress(models.Model):
     content_type = models.ForeignKey(ContentType,
                                      limit_choices_to={'app_label': 'contacts'})
     object_id = models.IntegerField(db_index=True)
-    content_object = generic.GenericForeignKey()
+    # content_object = generic.GenericForeignKey()
     email_address = models.EmailField(_('email address'))
     location = models.CharField(_('location'),
                                 max_length=6,
@@ -379,7 +364,7 @@ class InstantMessenger(models.Model):
     content_type = models.ForeignKey(ContentType,
                                      limit_choices_to={'app_label': 'contacts'})
     object_id = models.IntegerField(db_index=True)
-    content_object = generic.GenericForeignKey()
+    # content_object = generic.GenericForeignKey()
     im_account = models.CharField(_('im account'),
                                   max_length=100)
     location = models.CharField(_('location'),
@@ -408,7 +393,7 @@ class WebSite(models.Model):
     content_type = models.ForeignKey(ContentType,
                                      limit_choices_to={'app_label': 'contacts'})
     object_id = models.IntegerField(db_index=True)
-    content_object = generic.GenericForeignKey()
+    # content_object = generic.GenericForeignKey()
     url = models.URLField(_('URL'))
     location = models.CharField(_('location'),
                                 max_length=6,
@@ -435,7 +420,7 @@ class StreetAddress(models.Model):
     content_type = models.ForeignKey(ContentType,
                                      limit_choices_to={'app_label': 'contacts'})
     object_id = models.IntegerField(db_index=True)
-    content_object = generic.GenericForeignKey()
+    # content_object = generic.GenericForeignKey()
     street = models.TextField(_('street'),
                               blank=True)
     city = models.CharField(_('city'),
@@ -464,30 +449,6 @@ class StreetAddress(models.Model):
         db_table = 'contacts_street_addresses'
         verbose_name = _('street address')
         verbose_name_plural = _('street addresses')
-
-
-class SpecialDate(models.Model):
-    content_type = models.ForeignKey(ContentType,
-                                     limit_choices_to={'app_label': 'contacts'})
-    object_id = models.IntegerField(db_index=True)
-    content_object = generic.GenericForeignKey()
-    occasion = models.TextField(_('occasion'),
-                                max_length=200)
-    date = models.DateField(_('date'))
-    every_year = models.BooleanField(_('every year'),
-                                     default=True)
-    date_added = models.DateTimeField(_('date added'),
-                                      auto_now_add=True)
-    date_modified = models.DateTimeField(_('date modified'),
-                                         auto_now=True)
-
-    def __unicode__(self):
-        return u"%s: %s" % (self.occasion, self.date)
-
-    class Meta:
-        db_table = 'contacts_special_dates'
-        verbose_name = _('special date')
-        verbose_name_plural = _('special dates')
 
 
 class CompanyBalanceHistory(models.Model):
